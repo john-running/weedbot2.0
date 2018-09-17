@@ -166,15 +166,27 @@ def stop():
 	mdev.writeReg(mdev.CMD_PWM2,0)
 
 
-#function to do the magic - take picture, classify, then store (should probably be broken into multiple functions)
-def classify_image(i):
-
+def capture_image(i):
 	second = str(time.localtime().tm_sec)
 	hour =  str(time.localtime().tm_hour)
 	day =  str(time.localtime().tm_yday)
 	year =  str(time.localtime().tm_year)
 	
 	filename = year+day+hour+second+str(i)+'.jpg' 
+	return filename
+
+def write_to_database(filename,result):
+	conn=sqlite3.connect('GS.db')
+	curs=conn.cursor()
+	curs.execute("""INSERT INTO image_classifications (rDatetime,image_name,tf_result) values(datetime(CURRENT_TIMESTAMP, 'localtime'),
+	(?), (?))""", (filename,result))
+	conn.commit()
+	conn.close()
+
+#function to do the magic - take picture, classify, then store (should probably be broken into multiple functions)
+def classify_image(i):
+
+	filename = capture_image(i)
 	file_location = "static/" + filename
 	
 	call(["fswebcam", "-r", "320x240", "--no-banner", file_location]) # take picture with fswebcam
@@ -220,16 +232,11 @@ def classify_image(i):
 
 	tf_result = str(dlabels[0]) + " : " +  str(int(dresults[0]*100))
 
-	conn=sqlite3.connect('GS.db')
-	curs=conn.cursor()
-	curs.execute("""INSERT INTO image_classifications (rDatetime,image_name,tf_result) values(datetime(CURRENT_TIMESTAMP, 'localtime'),
-	(?), (?))""", (filename,tf_result))
-	conn.commit()
-	conn.close()
+	write_to_database(filename,tf_result)
+	
 
 # funciton to drive in a prescribed path taking a set number of pictures on every leg of the trip
-def driveandsnap(pictures = 20):
-
+def driveandsnap(pictures):
 	for i in range (0,pictures):  # drive then take picture then display whether weed or not
 		#Drive for half a second
 		drive("forward",0.5)
@@ -241,8 +248,8 @@ mdev = mDEV()
 loopcount = 0
 
 # run short loop to drive, take picture, classify, then turn, then repeat
-while loopcount < 4:
-	driveandsnap(4)
+while loopcount < 2:
+	driveandsnap(2)
 	turn("right",2)
 	loopcount +=1 
 
