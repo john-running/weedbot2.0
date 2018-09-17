@@ -1,0 +1,13 @@
+bluejay
+cardinals
+clover
+crabgrass
+daisy
+dandelion
+dirt
+grass
+ivy
+roses
+sparrow
+sunflowers
+tulips
