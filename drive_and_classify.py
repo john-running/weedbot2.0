@@ -136,7 +136,7 @@ def drive(direction="forward",drivetime=.5):
 	mdev.writeReg(mdev.CMD_PWM1,1000)
 	mdev.writeReg(mdev.CMD_PWM2,1000)
 
-	time.sleep(drivetime) #keep motor on for .15 seconds
+	time.sleep(drivetime) #keep motor on for prescribed time
 
 	stop()
 
@@ -153,10 +153,10 @@ def turn(direction="right",turntime=3):
 
 	mdev.writeReg(mdev.CMD_DIR1,dir1)
 	mdev.writeReg(mdev.CMD_DIR2,dir2)
-	mdev.writeReg(mdev.CMD_PWM1,900)
-	mdev.writeReg(mdev.CMD_PWM2,900)
+	mdev.writeReg(mdev.CMD_PWM1,1000)
+	mdev.writeReg(mdev.CMD_PWM2,1000)
 
-	time.sleep(turntime) #keep motor on for .15 seconds
+	time.sleep(turntime) #keep motor on for prescribed turn time
 
 	stop()
 	
@@ -183,8 +183,7 @@ def write_to_database(filename,result):
 	conn.commit()
 	conn.close()
 
-#function to do the magic - take picture, classify, then store (should probably be broken into multiple functions)
-def classify_image(i):
+#function to do the magic - take picture, classify, then store 
 
 	filename = capture_image(i)
 	file_location = "static/" + filename
