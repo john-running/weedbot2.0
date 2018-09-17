@@ -14,8 +14,7 @@ import sqlite3
 from subprocess import call
 
 
-def numMap(value,fromLow,fromHigh,toLow,toHigh):
-	return (toHigh-toLow)*(value-fromLow) / (fromHigh-fromLow) + toLow
+#Class for controlling motors
 
 class mDEV:
 	CMD_SERVO1 		= 	0
@@ -122,7 +121,7 @@ class mDEV:
 			mdev.writeReg(0xaa,(0xbb<<8)|(addr<<1))
 			
 
-
+#function to control driving of Weedbot
 
 def drive(direction="forward",drivetime=.5):
 
@@ -141,6 +140,7 @@ def drive(direction="forward",drivetime=.5):
 
 	stop()
 
+#function to control turning of weedbot
 
 def turn(direction="right",turntime=3):
 	
@@ -160,24 +160,13 @@ def turn(direction="right",turntime=3):
 
 	stop()
 	
-
+#stop function
 def stop():
 	mdev.writeReg(mdev.CMD_PWM1,0) # turn off electric motors 
 	mdev.writeReg(mdev.CMD_PWM2,0)
 
 
-def loop():	
-	mdev.readReg(mdev.CMD_SONIC)
-	while True:
-		SonicEchoTime = mdev.readReg(mdev.CMD_SONIC)
-		distance = SonicEchoTime * 17.0 / 1000.0
-		print "EchoTime: %d, Sonic: %.2f cm"%(SonicEchoTime,distance)
-		time.sleep(0.001)
-
-
-
-
-
+#function to do the magic - take picture, classify, then store (should probably be broken into multiple functions)
 def classify_image(i):
 
 	second = str(time.localtime().tm_sec)
@@ -238,25 +227,23 @@ def classify_image(i):
 	conn.commit()
 	conn.close()
 
+# funciton to drive in a prescribed path taking a set number of pictures on every leg of the trip
 def driveandsnap(pictures = 20):
 
 	for i in range (0,pictures):  # drive then take picture then display whether weed or not
-		
 		#Drive for half a second
-		
 		drive("forward",0.5)
 		time.sleep(.1)
 	 	classify_image(i)
 
-
 mdev = mDEV()
 
 loopcount = 0
+
+# run short loop to drive, take picture, classify, then turn, then repeat
 while loopcount < 4:
-	
 	driveandsnap(4)
 	turn("right",2)
-	
 	loopcount +=1 
 
 
