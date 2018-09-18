@@ -173,6 +173,7 @@ def capture_image(i):
 	year =  str(time.localtime().tm_year)
 	
 	filename = year+day+hour+second+str(i)+'.jpg' 
+	file_location = "static/" + filename
 	call(["fswebcam", "-r", "320x240", "--no-banner", file_location]) # take picture with fswebcam
 	return filename
 
@@ -190,7 +191,6 @@ def classify_image(i)
 
 	filename = capture_image(i)
 	file_location = "static/" + filename
-	
 	
 	time.sleep(0.1)
 
