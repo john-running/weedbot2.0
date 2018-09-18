@@ -173,6 +173,7 @@ def capture_image(i):
 	year =  str(time.localtime().tm_year)
 	
 	filename = year+day+hour+second+str(i)+'.jpg' 
+	call(["fswebcam", "-r", "320x240", "--no-banner", file_location]) # take picture with fswebcam
 	return filename
 
 def write_to_database(filename,result):
@@ -185,10 +186,12 @@ def write_to_database(filename,result):
 
 #function to do the magic - take picture, classify, then store 
 
+def classify_image(i)
+
 	filename = capture_image(i)
 	file_location = "static/" + filename
 	
-	call(["fswebcam", "-r", "320x240", "--no-banner", file_location]) # take picture with fswebcam
+	
 	time.sleep(0.1)
 
 	model_file = "tf_files/retrained_graph.pb" #local
