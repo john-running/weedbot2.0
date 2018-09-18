@@ -187,7 +187,7 @@ def write_to_database(filename,result):
 
 #function to do the magic - take picture, classify, then store 
 
-def classify_image(i)
+def classify_image(i):
 
 	filename = capture_image(i)
 	file_location = "static/" + filename
