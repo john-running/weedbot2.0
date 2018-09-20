@@ -1,15 +1,24 @@
+#system imports
 from __future__ import absolute_import
 from __future__ import division
 import argparse
 import sys
-import numpy as np
-import tensorflow as tf
-from scripts.label_image import load_graph,read_tensor_from_image_file,load_labels
 import smbus
 import time
 import wget
-import sqlite3
 from subprocess import call
+
+
+#tensorflow imports
+import numpy as np
+import tensorflow as tf
+from scripts.label_image import load_graph,read_tensor_from_image_file,load_labels
+
+
+#database import
+import sqlite3
+
+#imports for motor/device control
 from mdev import mDEV
 
 			
