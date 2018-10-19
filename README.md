@@ -9,3 +9,7 @@ Main.py runs a local Flask-based Webserver on Weedbot so that the results can be
 
 Classification is accomplished using Tensorflow on a pre-trained model called mobilenet that was further trained with photos taken by weedbot.  The current retrained model is in tf_files/retrained_graph.pb.  The code was adapted from https://github.com/EN10/TensorFlowForPoets
 
+mDEV.py contains Classes and methods required to control motors adapted from https://github.com/Freenove/Freenove_Three-wheeled_Smart_Car_Kit_for_Raspberry_Pi/tree/master/Server.  
+
+
+
