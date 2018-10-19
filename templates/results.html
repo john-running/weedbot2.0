@@ -22,7 +22,7 @@
       {% for row in results %}
       <tr>
         <td><img src="static/{{row[2]}}" width="90%"></td>
-        <td> {{row[3]}}%&nbsp;certainty<br><a href="/remove?id={{row[0]}}">Remove</a></td>
+        <td> {{row[3]}}%&nbsp;certainty<br>Lat/Long:<a href="http://maps.google.com/?q={{row[4]}}" target="_blank">{{row[4]}}</a><br><a href="/remove?id={{row[0]}}">Remove</a></td>
       </tr>
       {% endfor %}
     </tbody>

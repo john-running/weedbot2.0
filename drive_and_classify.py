@@ -4,7 +4,11 @@ from __future__ import division
 import argparse
 import sys
 import smbus
+import os
+from gps import *
+from time import *
 import time
+import threading
 import wget
 from subprocess import call
 
@@ -21,7 +25,21 @@ import sqlite3
 #imports for motor/device control
 from mdev import mDEV
 
-			
+
+gpsd = None #seting the global variable
+
+class GpsPoller(threading.Thread):
+  def __init__(self):
+    threading.Thread.__init__(self)
+    global gpsd #bring it in scope
+    gpsd = gps(mode=WATCH_ENABLE) #starting the stream of info
+    self.current_value = None
+    self.running = True #setting the thread running to true
+
+  def run(self):
+    global gpsd
+    while gpsp.running:
+      gpsd.next()
 
 #function to control driving of Weedbot
 
@@ -79,11 +97,11 @@ def capture_image(i):
 	call(["fswebcam", "-r", "320x240", "--no-banner", file_location]) # take picture with fswebcam
 	return filename
 
-def write_to_database(filename,result):
+def write_to_database(filename,result,lat_long):
 	conn=sqlite3.connect('GS.db')
 	curs=conn.cursor()
-	curs.execute("""INSERT INTO image_classifications (rDatetime,image_name,tf_result) values(datetime(CURRENT_TIMESTAMP, 'localtime'),
-	(?), (?))""", (filename,result))
+	curs.execute("""INSERT INTO image_classifications (rDatetime,image_name,tf_result,lat_long) values(datetime(CURRENT_TIMESTAMP, 'localtime'),
+	(?), (?), (?))""", (filename,result,lat_long))
 	conn.commit()
 	conn.close()
 
@@ -136,7 +154,9 @@ def classify_image(i):
 
 	tf_result = str(dlabels[0]) + " : " +  str(int(dresults[0]*100))
 
-	write_to_database(filename,tf_result)
+	lat_long = str(gpsd.fix.latitude) +","+str(gpsd.fix.longitude)
+
+	write_to_database(filename,tf_result,lat_long)
 	
 
 # funciton to drive in a prescribed path taking a set number of pictures on every leg of the trip
@@ -152,11 +172,18 @@ mdev = mDEV()
 loopcount = 0
 
 # run short loop to drive, take picture, classify, then turn, then repeat
-while loopcount < 2:
-	driveandsnap(2)
-	turn("right",2)
+
+gpsp = GpsPoller() 
+gpsp.start() # start polling gps
+  
+
+while loopcount < 4:
+	driveandsnap(100) #pass in number of images to capture
+	turn("right",2.5) #pass in direction of turn and time of turn 
 	loopcount +=1 
 
+gpsp.running = False
+gpsp.join() # 
 
 
 

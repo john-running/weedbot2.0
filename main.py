@@ -21,7 +21,6 @@ def index():
     return render_template('results.html', results=results)
 
 @app.route('/remove', methods=['GET', 'POST'])
-
 def remove():
     id = request.args.get('id')
     conn=sqlite3.connect('GS.db')
@@ -31,7 +30,6 @@ def remove():
     conn.close()
 
     return redirect(url_for("index"))
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080,debug=True)
