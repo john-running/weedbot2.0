@@ -1,6 +1,6 @@
 # weedbot2.0
 
-This repository contains files required to make weedbot find weeds and share results.
+This repository contains files needed to make weedbot drive, find weeds and share results on a local webserver.
 
 drive_and_classify.py contains code to tell weedbot to drive along a prescribed path, capture images of
 whatever it is driving over at .5 second intervals, classify those images and storing them in a SQLlite database GS.db. 
