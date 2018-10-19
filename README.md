@@ -11,5 +11,7 @@ Classification is accomplished using Tensorflow on a pre-trained model called mo
 
 mDEV.py contains Classes and methods required to control motors adapted from https://github.com/Freenove/Freenove_Three-wheeled_Smart_Car_Kit_for_Raspberry_Pi/tree/master/Server.  
 
+Uses GPSD package for GPS functionality. 
 
+mDEV and GPSD both require python 2.7 (not in 3.x).  Application must be run using Python 2.7.
 
